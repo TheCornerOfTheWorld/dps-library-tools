@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## 2.1.0 (2025-06-07)
+
+
+### ✨ Features | 新功能
+
+* 初始化项目 ([3d686a4](https://github.com/TheCornerOfTheWorld/dps-library-tools/commit/3d686a4dff2b2c5c86d0b7f47b250be5c3e2b1d7))
+
 ## [2.1.0](https://gitee.com/h_mo/uniapp-vue3-vite-ts-template/compare/v2.0.1...v2.1.0) (2025-04-02)
 
 
