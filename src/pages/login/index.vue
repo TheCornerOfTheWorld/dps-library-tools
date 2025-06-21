@@ -1,7 +1,7 @@
 <script setup lang="ts">
+import { omit } from 'lodash-es';
 import { useUserStore } from '@/stores/modules/user';
 import { Toast } from '@/utils/uniapi/prompt';
-import { omit } from 'lodash-es';
 
 const pageQuery = ref<Record<string, any> | undefined>(undefined);
 onLoad((query) => {

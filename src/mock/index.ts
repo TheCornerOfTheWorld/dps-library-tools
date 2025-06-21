@@ -1,6 +1,6 @@
-import { mockGroupV1 } from '@/mock/v1';
 import { uniappMockResponse, uniappRequestAdapter } from '@alova/adapter-uniapp';
 import { createAlovaMockAdapter } from '@alova/mock';
+import { mockGroupV1 } from '@/mock/v1';
 
 /**
  * 模拟数据请求适配器
