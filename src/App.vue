@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useUserStore } from '@/stores/modules/user';
 import { onHide, onLaunch, onShow } from '@dcloudio/uni-app';
+import { useUserStore } from '@/stores/modules/user';
 
 onLaunch(() => {
   console.log('App Launch');
@@ -16,4 +16,10 @@ onHide(() => {
 </script>
 
 <style>
+html,
+body,
+uni-page-body,
+#app {
+  height: 100%;
+}
 </style>

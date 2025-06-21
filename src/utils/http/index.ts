@@ -1,26 +1,31 @@
 import type { API } from '@/services/model/baseModel';
+import AdapterUniapp from '@alova/adapter-uniapp';
+import { createAlova } from 'alova';
+import { assign, isEmpty } from 'lodash-es';
 import { ContentTypeEnum, ResultEnum } from '@/enums/httpEnum';
 import { mockAdapter } from '@/mock';
 import { getAuthorization } from '@/utils/auth';
-import { getBaseUrl, isUseMock } from '@/utils/env';
-import AdapterUniapp from '@alova/adapter-uniapp';
-import { createAlova } from 'alova';
-import { assign } from 'lodash-es';
+import { isUseMock } from '@/utils/env';
+// import { getBaseUrl, isUseMock } from '@/utils/env';
 import { handleHttpStatus, handleLogicError } from './faultTolerance';
-
-const BASE_URL = getBaseUrl();
+// const BASE_URL = getBaseUrl();
 
 const ContentType = {
   'Content-Type': ContentTypeEnum.JSON,
   'Accept': 'application/json, text/plain, */*',
 };
 
+interface ConfigMeta {
+  ignoreAuth: boolean // 是否需要凭证
+  noAuthorization: boolean // 是否需要TOKEN
+}
+
 /**
  * alova 请求实例
  * @link https://github.com/alovajs/alova
  */
 const alovaInstance = createAlova({
-  baseURL: BASE_URL,
+  baseURL: '/',
   ...AdapterUniapp({
     /* #ifndef APP-PLUS */
     mockRequest: isUseMock() ? mockAdapter : undefined, // APP 平台无法使用mock
@@ -29,13 +34,19 @@ const alovaInstance = createAlova({
   timeout: 5000,
   beforeRequest: async (method) => {
     method.config.headers = assign(method.config.headers, ContentType);
-    const { config } = method;
-    const ignoreAuth = !config.meta?.ignoreAuth;
+    const { config, url } = method;
+    if (!/^\/api\//.test(url)) {
+      method.url = `/api${url}`;
+    }
+
+    const { ignoreAuth, noAuthorization } = config.meta as ConfigMeta || {};
     const authorization = ignoreAuth ? getAuthorization() : null;
     if (ignoreAuth && !authorization) {
       throw new Error('[请求错误]：未登录');
     }
-    method.config.headers.authorization = getAuthorization();
+    if (!noAuthorization) {
+      method.config.headers.authorization = getAuthorization();
+    }
   },
   responded: {
     /**
@@ -55,6 +66,8 @@ const alovaInstance = createAlova({
         const { code, message, data } = rawData as API;
         if (code === ResultEnum.SUCCESS) {
           return data as any;
+        } else if (!isEmpty(data)) {
+          return rawData;
         }
         // 逻辑错误处理，与业务相关
         handleLogicError(code, message);

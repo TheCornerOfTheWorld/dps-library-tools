@@ -12,6 +12,16 @@
       }
     },
     {
+      "name": "Detail",
+      "path": "pages/index/book-detail",
+      "style": {
+        "navigationBarTitleText": "Detail"
+      },
+      "meta": {
+        "ignoreAuth": true
+      }
+    },
+    {
       "name": "Demo",
       "path": "pages/demo/index",
       "style": {

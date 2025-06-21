@@ -15,7 +15,15 @@ export default defineConfig(async ({ mode }) => {
   const root = process.cwd();
   const env = loadEnv(mode, resolve(root, 'env'));
   const isProd = mode === 'production';
-  const { VITE_PROXY_PREFIX, VITE_UPLOAD_PROXY_PREFIX, VITE_BASE_URL, VITE_UPLOAD_URL, VITE_PORT } = env;
+  const {
+    VITE_PROXY_PREFIX,
+    VITE_UPLOAD_PROXY_PREFIX,
+    VITE_BASE_URL,
+    VITE_UPLOAD_URL,
+    VITE_PORT,
+    VITE_LIBRARY_URL,
+    VITE_LIBRARY_PROXY_PREFIX,
+  } = env;
   return {
     base: './',
     envDir: './env', // 自定义env目录
@@ -46,7 +54,10 @@ export default defineConfig(async ({ mode }) => {
       host: true,
       // open: true,
       port: Number.parseInt(VITE_PORT!, 10),
-      proxy: resolveProxy([[VITE_PROXY_PREFIX!, VITE_BASE_URL!], [VITE_UPLOAD_PROXY_PREFIX!, VITE_UPLOAD_URL!]]),
+      proxy: resolveProxy(
+        [[VITE_PROXY_PREFIX!, VITE_BASE_URL!], [VITE_UPLOAD_PROXY_PREFIX!, VITE_UPLOAD_URL!], [VITE_LIBRARY_PROXY_PREFIX!, VITE_LIBRARY_URL!],
+        ],
+      ),
     },
     // 构建配置
     build: {

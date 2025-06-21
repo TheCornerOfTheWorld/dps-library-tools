@@ -17,6 +17,8 @@ interface ImportMetaEnv {
   readonly VITE_USE_MOCK: string | boolean
   readonly VITE_PROXY_PREFIX: string
   readonly VITE_UPLOAD_PROXY_PREFIX: string
+  readonly VITE_LIBRARY_URL: string
+  readonly VITE_LIBRARY_PROXY_PREFIX: string
 }
 
 interface ImportMeta {
