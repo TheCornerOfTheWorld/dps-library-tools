@@ -5,7 +5,7 @@ import { assign, isEmpty } from 'lodash-es';
 import { ContentTypeEnum, ResultEnum } from '@/enums/httpEnum';
 import { mockAdapter } from '@/mock';
 import { getAuthorization } from '@/utils/auth';
-import { isUseMock } from '@/utils/env';
+import { getEnvValue, isUseMock } from '@/utils/env';
 // import { getBaseUrl, isUseMock } from '@/utils/env';
 import { handleHttpStatus, handleLogicError } from './faultTolerance';
 // const BASE_URL = getBaseUrl();
@@ -35,13 +35,17 @@ const alovaInstance = createAlova({
   beforeRequest: async (method) => {
     method.config.headers = assign(method.config.headers, ContentType);
     const { config, url } = method;
-    if (!/^\/api\//.test(url)) {
+    if (!/\/api\//.test(url)) {
       method.url = `/api${url}`;
     }
-
+    /* #ifdef MP-WEIXIN */
+    if (/\/library\//.test(url)) {
+      method.url = `${getEnvValue('VITE_LIBRARY_URL')}/${url.replace('/library/', '')}`;
+    }
+    /* #endif */
     const { ignoreAuth, noAuthorization } = config.meta as ConfigMeta || {};
-    const authorization = ignoreAuth ? getAuthorization() : null;
-    if (ignoreAuth && !authorization) {
+    const authorization = !ignoreAuth ? getAuthorization() : null;
+    if (!ignoreAuth && !authorization) {
       throw new Error('[请求错误]：未登录');
     }
     if (!noAuthorization) {

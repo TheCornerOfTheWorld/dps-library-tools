@@ -1,4 +1,4 @@
-import { defineConfig, presetIcons } from 'unocss';
+import { defineConfig, presetIcons, transformerDirectives } from 'unocss';
 import presetWeapp from 'unocss-preset-weapp';
 import { transformerAttributify, transformerClass } from 'unocss-preset-weapp/transformer';
 import { isWeixinMp } from './build/platform';
@@ -55,6 +55,7 @@ export default defineConfig({
     },
   },
   transformers: [
+    transformerDirectives(),
     // options https://github.com/MellowCo/unocss-preset-weapp/tree/main/src/transformer/transformerAttributify
     transformerAttributify({
       classPrefix: prefix,

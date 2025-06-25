@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getAutoComplete, getQueryResult } from '@/services/api/book';
+import { getAutoComplete, getBookDetail, getQueryResult } from '@/services/api/book';
 
 export const useBookStore = defineStore('BookStore', () => {
   const autoCompleteList = ref<AutoCompleteResData[]>([]);
@@ -20,9 +20,9 @@ export const useBookStore = defineStore('BookStore', () => {
     v_endpubyear: '',
     v_secondquery: '',
     client_id: 't1',
-
   });
 
+  const book = ref<BookModel | null>(null);
   // 输入建议
   const { send: sendAutoComplete } = useRequest(getAutoComplete, { immediate: false });
   async function qryAutoComplete(params: GetBooksParams) {
@@ -37,17 +37,34 @@ export const useBookStore = defineStore('BookStore', () => {
 
   // 书籍查询结果
   const { send: sendQueryResult } = useRequest(getQueryResult, { immediate: false });
-  async function qryBookList(keyword: string) {
+  async function qryBookList(params: { keyword: string, accuracy: string, lib: string }) {
     try {
+      const { keyword, accuracy, lib } = params || {};
       qryBookListParams.v_value = keyword;
+      qryBookListParams.v_index = accuracy;
+      qryBookListParams.library = lib;
       const res = await sendQueryResult(qryBookListParams);
-      console.log('🚀 ~ qryBookList ~ res:', res);
-
       const { data } = res || {};
       const { numFound, docs } = data || {};
       bookList.value = docs;
       total.value = numFound;
       qryBookListParams.v_page += 1;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // 书籍查询结果
+  const { send: sendGetBookDetail } = useRequest(getBookDetail, { immediate: false });
+  async function getBook(bookId: string) {
+    try {
+      const res = await sendGetBookDetail({
+        metaTable: 'bibliosm',
+        metaId: bookId,
+        library: 'all',
+        client_id: 't1',
+      });
+      book.value = res;
     } catch (error) {
       throw error;
     }
@@ -59,5 +76,7 @@ export const useBookStore = defineStore('BookStore', () => {
     bookList,
     total,
     qryBookList,
+    book,
+    getBook,
   };
 });

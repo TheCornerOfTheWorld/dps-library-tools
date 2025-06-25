@@ -6,7 +6,7 @@
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": false,
-  "editor.tabSize": 4,
+  "editor.tabSize": 2,
   "files.eol": "auto",
   "eslint.enable": true,
 
@@ -14,7 +14,7 @@
   // 官网参考：https://prettier.io/docs/en/options.html#tab-width //
   ////////////////////////////////////////////////////////////////
   "prettier.semi": true,
-  "prettier.tabWidth": 4,
+  "prettier.tabWidth": 2,
   "prettier.printWidth": 160,
   "prettier.endOfLine": "auto",
   "prettier.singleQuote": true,
@@ -69,5 +69,6 @@
     "scss",
     "pcss",
     "postcss"
-]
+],
+"typescript.tsdk": "node_modules/typescript/lib"
 }

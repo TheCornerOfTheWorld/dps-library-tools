@@ -83,3 +83,8 @@ declare interface BooksResultAPI {
 declare interface AutoCompleteAPI {
   data: AutoCompleteResData[]
 }
+
+declare interface GetBookDetailParams { metaTable: string, metaId: string, library: string, client_id: string }
+
+declare interface GetBookDetailRes extends BookModel {
+}

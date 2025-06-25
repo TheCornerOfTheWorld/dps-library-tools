@@ -1486,6 +1486,9 @@ export const autoComplete = {
 export const booksMocks = defineMock({
   // 查询
   '[GET]/library/api/opacservice/getQueryResult': () => {
-    return createMock(booksMock);
+    return createMock({ data: booksMock });
+  },
+  '[GET]/library/api/opacservice/getBookDetail': () => {
+    return createMock({ data: bookMock });
   },
 });

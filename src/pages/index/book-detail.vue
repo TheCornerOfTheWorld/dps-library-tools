@@ -1,27 +1,17 @@
 <script lang="ts" setup>
-// import { getUserInfoApi } from "@/services/api/user";
+import { useBookStore } from '@/stores/modules/book';
 
-// const apiParams = reactive({
-//   metaTable: '',
-//   metaId: '',
-//   library: '',
-//   client_id: '',
-// })
-const book = ref<BookModel | null>(null);
-async function qryGetBookDetailApi() {
-  // const res: any = await getUserInfoApi();
-  // book.value = res?.data;
-}
+const props = defineProps({
+  id: {
+    type: String,
+    default: '',
+  },
+});
+const bookStore = useBookStore();
+const { book } = toRefs(bookStore);
 
-qryGetBookDetailApi();
-
-const items = ['选项1', '选项2', '选项3'];
 const current = ref(0);
-function onClickItem(e: any) {
-  if (current.value !== e.currentIndex) {
-    current.value = e.currentIndex;
-  }
-}
+bookStore.getBook(props.id);
 </script>
 
 <template>
@@ -63,13 +53,6 @@ function onClickItem(e: any) {
     </view>
   </view>
 
-  <uni-segmented-control
-    style-type="text"
-    active-color="#dd524d"
-    :current="current"
-    :values="items"
-    @click-item="onClickItem"
-  />
   <view class="content">
     <view v-show="current === 0">
       选项卡1的内容
@@ -117,3 +100,9 @@ function onClickItem(e: any) {
     </view>
   </van-tabs> -->
 </template>
+
+<style scoped>
+.book-detail-img {
+  @apply w-16 h-32;
+}
+</style>
